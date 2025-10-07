@@ -35,4 +35,17 @@ let alumnos = [
 
 const alumnosDAW = alumnos.filter(a => a.curso == "DAW");
 console.log("Cursos DAW: " + alumnosDAW.map(a => "{nombre:" + a.nombre + ",nota:" + a.nota + ",curso:" + a.curso + "}"));
-console.log("Nota media de DAW: " + alumnosDAW.reduce(acc))
+console.log("Nota media de DAW: " + alumnosDAW.reduce(((acc,alumno) => acc += alumno.nota),0)/alumnosDAW.length);
+console.log("Buscar a María: " + alumnos.find(alumno => alumno.nombre=="María").nombre);
+console.log("Primer suspenso: " + alumnos.findIndex(alumno => alumno.nota<5));
+alumnos.sort((a, b) => b.nota-a.nota);
+console.log("Alumnos ordenados por nota: " + alumnos.map(a => "{nombre:" + a.nombre + ",nota:" + a.nota + ",curso:" + a.curso + "}"));
+
+function mapPupilsByPassed(pupils){
+  return pupilsMap = {
+    passed : pupils.filter(a => a.nota>=5),
+    notPassed : pupils.filter(a => a.nota<5)
+  };
+}
+let pupils = mapPupilsByPassed(alumnos)
+console.log("Mapa de alumnos: " + pupils);
