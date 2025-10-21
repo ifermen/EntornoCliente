@@ -1,34 +1,45 @@
-let alumnos = [
-  {nombre:'Ana', nota:7.5},
-  {nombre:'Luis', nota:4.5},
-  {nombre:'María', nota:9.0},
-  {nombre:'Pedro', nota:6.0},
-  {nombre:'Lucía', nota:8.5}
-];
+import {gradebook,calculateAverage,addStudent,addGrade,getNameByAverageOver8,getNameBySomeGradeOver9,sortByAverage} from './gradebook.js'
 
 document.addEventListener("DOMContentLoaded", (e)=>{
     const tBody = document.getElementById("tableBody");
 
-    function updateTable(alumnos){
-        alumnos.forEach((alumnos,i) => {
-            addRow(alumnos,i);
-        });
+    /**
+     * Clean the table body and reload the datas from gradebook 
+     */
+    function renderTable(){
+        tBody.innerHTML = ``;
+        gradebook.students.forEach(student => {
+            addRow(student);
+        })
     }
 
-    function addRow(alumn, index){
-        const row = document.createElement("tr");
+    /**
+     * Add a new row in the tbody
+     * @param {import('./gradebook.js').Student} student 
+     */
+    function addRow({name, grades, average}){
+        const newRow = document.createElement("tr");
 
-        const tdName = document.createElement("td");
-        tdName.textContent = alumn.nombre;
+        const nameCell = document.createElement("td");
+        nameCell.textContent = name;
 
-        const tdNota = document.createElement("td");
-        tdNota.textContent = alumn.nota;
+        const gradesCell = document.createElement("td");
+        gradesCell.textContent = grades.reduce((carry,grade,idx) => {
+            carry = carry + grade;
+            if(idx != grades.length-1){
+                carry = carry + ", ";
+            }
+            return carry;
+        },"");
 
-        row.appendChild(tdName);
-        row.appendChild(tdNota);
+        const averageCell = document.createElement("td");
+        averageCell.textContent = average;
 
-        tBody.appendChild(row);
+        newRow.appendChild(nameCell);
+        newRow.appendChild(gradesCell);
+        newRow.appendChild(averageCell);
+        tBody.appendChild(newRow);
     }
 
-    updateTable(alumnos)
+    renderTable();
 });
