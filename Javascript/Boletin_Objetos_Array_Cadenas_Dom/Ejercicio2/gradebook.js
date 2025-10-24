@@ -49,7 +49,12 @@ let gradebook = {
 function calculateAverage(){
     gradebook.students.forEach(student => {
         student.average = 
-            student.grades.reduce(((acc,grade) => acc += grade),0)/student.grades.length;
+            Math.round(
+                student.grades.reduce(
+                    ((acc,grade) => acc += grade),
+                    0
+                )/student.grades.length * 100
+                )/100;
     });
 }
 
@@ -58,10 +63,16 @@ function calculateAverage(){
  * @param {string} name 
  */
 function addStudent(name){
+    let result = undefined;
     let index = gradebook.students.findIndex(student => student.name == name);
     if(index == -1){
-        gradebook.students.push({name:name,grades:[],average:0});
+        result = {
+            name:name,
+            grades:[],
+            average:0};
+        gradebook.students.push(result);
     }
+    return result;
 }
 
 /**
