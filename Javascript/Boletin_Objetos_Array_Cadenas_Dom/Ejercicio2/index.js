@@ -32,7 +32,8 @@ document.addEventListener("DOMContentLoaded", (e)=>{
         tBody.innerHTML = ``;
         gradebook.students.forEach(student => {
             addRow(student);
-        })
+        });
+        markOutstanding();
     }
 
     /**
@@ -51,33 +52,45 @@ document.addEventListener("DOMContentLoaded", (e)=>{
         const averageCell = document.createElement("td");
         averageCell.textContent = average;
 
+        const buttonCell = document.createElement("td");
         const buttonAddGrade = document.createElement("button");
         buttonAddGrade.textContent = "New Grade";
-        
         buttonAddGrade.addEventListener("click", e => {
-            updateRow(name,newRow);
+            buttonAddGrade.disabled = true;
+            addFormNewGrade(name,buttonCell);
         });
+        buttonCell.appendChild(buttonAddGrade);
 
         newRow.appendChild(nameCell);
         newRow.appendChild(gradesCell);
         newRow.appendChild(averageCell);
-        newRow.appendChild(buttonAddGrade);
+        newRow.appendChild(buttonCell);
         tBody.appendChild(newRow);
     }
 
     /**
      * Add a form for add a new grade 
+     * @param {string} name 
+     * @param {HTMLTableCellElement} cell 
      */
-    function addFormNewGrade(name,row){
+    function addFormNewGrade(name,cell){
         const inputGrade = document.createElement("input");
         inputGrade.type = "number";
-        inputGrade.style.width = "2em";
+        inputGrade.max = 10;
+        inputGrade.min = 0;
+        inputGrade.style.width = "5em";
         const buttonAddGrade = document.createElement("button");
         buttonAddGrade.textContent = "Add";
         buttonAddGrade.addEventListener("click", e => {
-            let grade = inputGrade.value;
+            let grade = Number(inputGrade.value);
             addGrade(name,grade);
+            updateRow(name,cell.parentElement);
+            cell.children.item(0).disabled = false;
+            cell.removeChild(inputGrade);
+            cell.removeChild(buttonAddGrade);
         });
+        cell.appendChild(inputGrade);
+        cell.appendChild(buttonAddGrade);
     }
 
     /**
@@ -91,6 +104,7 @@ document.addEventListener("DOMContentLoaded", (e)=>{
         cells.item(0).textContent = student.name;
         cells.item(1).textContent = gradesToString(student.grades);
         cells.item(2).textContent = student.average;
+        markOutstanding();
     }
 
     /**
@@ -106,6 +120,15 @@ document.addEventListener("DOMContentLoaded", (e)=>{
             }
             return carry;
         },"");
+    }
+
+    function markOutstanding(){
+        const names = getNameByAverageOver8();
+        Array.from(tBody.children).forEach(row => {
+            if(names.indexOfincludes(row.children.item(0).textContent)){
+                row.className = "outstanding";
+            }
+        })
     }
 
     renderTable();
