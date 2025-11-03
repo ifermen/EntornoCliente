@@ -125,7 +125,7 @@ document.addEventListener("DOMContentLoaded", (e)=>{
     function markOutstanding(){
         const names = getNameByAverageOver8();
         Array.from(tBody.children).forEach(row => {
-            if(names.indexOfincludes(row.children.item(0).textContent)){
+            if(names.includes(row.children.item(0).textContent)){
                 row.className = "outstanding";
             }
         })

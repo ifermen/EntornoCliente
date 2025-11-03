@@ -5,11 +5,11 @@ Imagina que eres un profesor y quieres llevar un sistema de notas para tus alumn
 
 Ejemplo inicial:
 let gradebook = {
-  students: [
+students: [
     { name: "Ana", grades: [8, 7, 9], average: 0 },
     { name: "Luis", grades: [6, 8, 6], average: 0 },
     { name: "Maria", grades: [9, 10, 9], average: 0 }
-  ]
+]
 };
 
 Tareas:
